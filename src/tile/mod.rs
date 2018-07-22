@@ -6,6 +6,7 @@ pub struct Tile<'a> {
 
 impl<'a> Tile<'a> {
     // Returns a new tile with default position at 0 0
+    #[allow(dead_code)]
     pub fn new() -> Self {
         let position = Position { row: 0, column: 0 };
         let neighbours = Vec::new();
@@ -13,6 +14,7 @@ impl<'a> Tile<'a> {
     }
 
     // Returns a new tile with the given column and row
+    #[allow(dead_code)]
     pub fn with_row_column(r: u32, c: u32) -> Self {
         let mut tile = Tile::new();
         tile.position.row = r;
@@ -21,6 +23,7 @@ impl<'a> Tile<'a> {
     }
 
     // Adds a neighbour if tile to add has another position
+    #[allow(dead_code)]
     pub fn add_neighbour(&mut self, n: &'a Tile) {
         if !self.neighbours.contains(&n) && self != n {
             self.neighbours.push(n);
@@ -80,6 +83,7 @@ mod tests {
         tile.add_neighbour(&tile_a);
         tile.add_neighbour(&tile_b);
         tile.add_neighbour(&tile_c);
+        tile.add_neighbour(&tile_d);
 
         assert_eq!(2, tile.neighbours.len());
     }

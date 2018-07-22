@@ -1,5 +1,4 @@
+mod tile;
 mod maze;
 
-fn main() {
-
-}
+fn main() {}
