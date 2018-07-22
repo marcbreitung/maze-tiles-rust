@@ -1,0 +1,6 @@
+[package]
+name = "maze-tiles-rust"
+version = "0.1.0"
+authors = ["Marc Breitung <info@marcbreitung.de>"]
+
+[dependencies]
