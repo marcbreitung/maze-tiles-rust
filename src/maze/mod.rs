@@ -16,7 +16,7 @@ mod tests {
     use super::Maze;
 
     #[test]
-    fn maze_struct() {
+    fn maze_new() {
         let maze = Maze::new();
         assert_eq!(0, maze.tiles.len());
     }
