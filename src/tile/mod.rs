@@ -18,6 +18,7 @@ pub struct Position {
 #[derive(PartialEq, Debug)]
 pub struct Tile<'a> {
     pub position: Position,
+    pub walkable: [bool; 9],
     pub neighbour_top: Option<&'a Tile<'a>>,
     pub neighbour_right: Option<&'a Tile<'a>>,
     pub neighbour_bottom: Option<&'a Tile<'a>>,
@@ -29,7 +30,7 @@ impl<'a> Tile<'a> {
     #[allow(dead_code)]
     pub fn new() -> Self {
         let position = Position { column: 0, row: 0 };
-        Tile { position, neighbour_top: None, neighbour_right: None, neighbour_bottom: None, neighbour_left: None }
+        Tile { position, walkable: [false; 9], neighbour_top: None, neighbour_right: None, neighbour_bottom: None, neighbour_left: None }
     }
 
     // Returns a tile at the given row and column without any neighbours
@@ -38,6 +39,14 @@ impl<'a> Tile<'a> {
         let mut tile = Tile::new();
         tile.position.column = column;
         tile.position.row = row;
+        tile
+    }
+
+    // Returns a tile at the given row, column and walkable without any neighbours
+    #[allow(dead_code)]
+    pub fn with_position_and_walkable(column: u32, row: u32, walkable: [bool; 9]) -> Self {
+        let mut tile = Tile::with_position(column, row);
+        tile.walkable = walkable;
         tile
     }
 
@@ -99,6 +108,14 @@ mod tests {
         let tile = Tile::with_position(1, 2);
         assert_eq!(1, tile.position.column);
         assert_eq!(2, tile.position.row);
+    }
+
+    #[test]
+    fn with_position_and_walkable() {
+        let tile = Tile::with_position_and_walkable(1, 2, [false, true, false, true, true, true, false, true, false]);
+        assert_eq!(1, tile.position.column);
+        assert_eq!(2, tile.position.row);
+        assert_eq!([false, true, false, true, true, true, false, true, false], tile.walkable);
     }
 
     #[test]
