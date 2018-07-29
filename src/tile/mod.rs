@@ -32,28 +32,28 @@ impl<'a> Tile<'a> {
     }
 
     /// Adds a tile if the given tile is a neighbour
-    pub fn add_neighbour(&mut self, n: &'a Tile) {
-        let direction = self.neighbour_at(&n);
+    pub fn add_neighbour(&mut self, neighbour: &'a Tile) {
+        let direction = self.neighbour_at(&neighbour);
         match direction {
-            Some(d) => self.add_neighbour_at(&n, d),
+            Some(direction) => self.add_neighbour_at(&neighbour, direction),
             None => (),
         }
     }
 
     /// Adds a tile at the given position
-    pub fn add_neighbour_at(&mut self, n: &'a Tile, d: Direction) {
-        match d {
-            Direction::Top => { self.neighbour_top = Some(&n) }
-            Direction::Right => { self.neighbour_right = Some(&n) }
-            Direction::Bottom => { self.neighbour_bottom = Some(&n) }
-            Direction::Left => { self.neighbour_left = Some(&n) }
+    pub fn add_neighbour_at(&mut self, neighbour: &'a Tile, direction: Direction) {
+        match direction {
+            Direction::Top => { self.neighbour_top = Some(&neighbour) }
+            Direction::Right => { self.neighbour_right = Some(&neighbour) }
+            Direction::Bottom => { self.neighbour_bottom = Some(&neighbour) }
+            Direction::Left => { self.neighbour_left = Some(&neighbour) }
         }
     }
 
     /// Checks if a given tile is a neighbour and returns an Option with the direction
-    pub fn neighbour_at(&self, n: &'a Tile) -> Option<Direction> {
-        let column_diff = n.position.column as i32 - self.position.column as i32;
-        let row_diff = n.position.row as i32 - self.position.row as i32;
+    pub fn neighbour_at(&self, neighbour: &'a Tile) -> Option<Direction> {
+        let column_diff = neighbour.position.column as i32 - self.position.column as i32;
+        let row_diff = neighbour.position.row as i32 - self.position.row as i32;
 
         match (column_diff, row_diff) {
             (0, -1) => Some(Direction::Top),
@@ -64,6 +64,40 @@ impl<'a> Tile<'a> {
         }
     }
 
+    /// Checks if two tiles have a walkable connection
+    pub fn has_walkable_neighbour(&self, neighbour: &'a Tile) -> bool {
+        let direction = self.neighbour_at(&neighbour);
+        match direction {
+            Some(direction) => { self.has_walkable_neighbour_at_direction(&neighbour, direction) }
+            None => { false }
+        }
+    }
+
+    /// Checks if two tiles have a walkable connection at given direction
+    pub fn has_walkable_neighbour_at_direction(&self, n: &'a Tile, direction: Direction) -> bool {
+        match direction {
+            Direction::Top => {
+                self.walkable[0] == true && n.walkable[6] == true ||
+                    self.walkable[1] == true && n.walkable[7] == true ||
+                    self.walkable[2] == true && n.walkable[8] == true
+            }
+            Direction::Right => {
+                self.walkable[2] == true && n.walkable[0] == true ||
+                    self.walkable[5] == true && n.walkable[3] == true ||
+                    self.walkable[8] == true && n.walkable[6] == true
+            }
+            Direction::Bottom => {
+                self.walkable[6] == true && n.walkable[0] == true ||
+                    self.walkable[7] == true && n.walkable[1] == true ||
+                    self.walkable[8] == true && n.walkable[2] == true
+            }
+            Direction::Left => {
+                self.walkable[0] == true && n.walkable[2] == true ||
+                    self.walkable[3] == true && n.walkable[5] == true ||
+                    self.walkable[6] == true && n.walkable[8] == true
+            }
+        }
+    }
 }
 
 /// Defines in which direction two tiles are connected
@@ -129,37 +163,76 @@ mod tests {
     }
 
     #[test]
-    fn is_neighbour_at_same_position() {
+    fn neighbour_at_same_position() {
         let tile_a = Tile::new();
         let tile_b = Tile::new();
         assert_eq!(Option::None, tile_b.neighbour_at(&tile_a));
     }
 
     #[test]
-    fn is_neighbour_at_top() {
+    fn neighbour_at_top() {
         let tile_a = Tile::with_position(1, 1);
         let tile_b = Tile::with_position(1, 2);
         assert_eq!(Some(Direction::Top), tile_b.neighbour_at(&tile_a));
     }
 
     #[test]
-    fn is_neighbour_at_right() {
+    fn neighbour_at_right() {
         let tile_a = Tile::with_position(2, 1);
         let tile_b = Tile::with_position(1, 1);
         assert_eq!(Some(Direction::Right), tile_b.neighbour_at(&tile_a));
     }
 
     #[test]
-    fn is_neighbour_at_bottom() {
+    fn neighbour_at_bottom() {
         let tile_a = Tile::with_position(1, 2);
         let tile_b = Tile::with_position(1, 1);
         assert_eq!(Some(Direction::Bottom), tile_b.neighbour_at(&tile_a));
     }
 
     #[test]
-    fn is_neighbour_at_left() {
+    fn neighbour_at_left() {
         let tile_a = Tile::with_position(1, 1);
         let tile_b = Tile::with_position(2, 1);
         assert_eq!(Some(Direction::Left), tile_b.neighbour_at(&tile_a));
+    }
+
+    #[test]
+    fn is_neighbour_with_walkable_connection() {
+        let tile_a = Tile::with_position_and_walkable(3, 3, [
+            false, true, false,
+            true, true, true,
+            false, true, false
+        ]);
+        let tile_b = Tile::with_position_and_walkable(2, 3, [
+            false, true, false,
+            true, true, true,
+            false, true, false
+        ]);
+        assert_eq!(true, tile_b.has_walkable_neighbour(&tile_a));
+
+        let tile_a = Tile::with_position_and_walkable(3, 3, [
+            false, true, false,
+            false, true, true,
+            false, true, false
+        ]);
+        let tile_b = Tile::with_position_and_walkable(2, 3, [
+            false, true, false,
+            true, true, false,
+            false, true, false
+        ]);
+        assert_eq!(false, tile_b.has_walkable_neighbour(&tile_a));
+
+        let tile_a = Tile::with_position_and_walkable(3, 3, [
+            false, false, false,
+            true, true, true,
+            false, false, false
+        ]);
+        let tile_b = Tile::with_position_and_walkable(2, 3, [
+            false, true, false,
+            true, true, false,
+            false, true, false
+        ]);
+        assert_eq!(false, tile_b.has_walkable_neighbour(&tile_a));
     }
 }
