@@ -1,4 +1,8 @@
-/// A tile defines the walkable parts of the maze
+/// A tile defines a walkable part of the maze.
+/// # Examle
+/// ```
+/// let tile = maze_tiles_rust::tile::Tile::new();
+/// ```
 #[derive(PartialEq, Debug)]
 pub struct Tile<'a> {
     pub position: Position,
@@ -10,13 +14,23 @@ pub struct Tile<'a> {
 }
 
 impl<'a> Tile<'a> {
-    /// Returns a tile at position (row: 0, column: 0) without any neighbours
+    /// Returns a new tile at position (row: 0, column: 0) without any neighbours
+    /// ```
+    /// use maze_tiles_rust::tile::Tile;
+    ///
+    /// let tile = Tile::new();
+    /// ```
     pub fn new() -> Self {
         let position = Position { column: 0, row: 0 };
         Tile { position, walkable: [false; 9], neighbour_top: None, neighbour_right: None, neighbour_bottom: None, neighbour_left: None }
     }
 
-    /// Returns a tile at the given row and column without any neighbours
+    /// Returns a new tile at the given row and column without any neighbours
+    /// ```
+    /// use maze_tiles_rust::tile::Tile;
+    ///
+    /// let tile = Tile::with_position(1, 2);
+    /// ```
     pub fn with_position(column: u32, row: u32) -> Self {
         let mut tile = Tile::new();
         tile.position.column = column;
@@ -25,6 +39,11 @@ impl<'a> Tile<'a> {
     }
 
     /// Returns a tile at the given row, column and walkable without any neighbours
+    /// ```
+    /// use maze_tiles_rust::tile::Tile;
+    ///
+    /// let tile = Tile::with_position_and_walkable(1, 2, [false, true, false, true, true, true, false, true, false]);
+    /// ```
     pub fn with_position_and_walkable(column: u32, row: u32, walkable: [bool; 9]) -> Self {
         let mut tile = Tile::with_position(column, row);
         tile.walkable = walkable;
@@ -73,7 +92,7 @@ impl<'a> Tile<'a> {
         }
     }
 
-    /// Checks if two tiles have a walkable connection at given direction
+    /// Checks if two tiles have a walkable connection at a given direction
     pub fn has_walkable_neighbour_at_direction(&self, n: &'a Tile, direction: Direction) -> bool {
         match direction {
             Direction::Top => {
@@ -133,7 +152,7 @@ mod tests {
     }
 
     #[test]
-    fn tile_add_neighbour_at() {
+    fn with_position() {
         let tile = Tile::with_position(1, 2);
         assert_eq!(1, tile.position.column);
         assert_eq!(2, tile.position.row);
