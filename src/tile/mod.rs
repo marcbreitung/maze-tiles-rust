@@ -1,3 +1,5 @@
+use position::Position;
+
 /// A tile defines a walkable part of the maze.
 /// # Examle
 /// ```
@@ -21,7 +23,7 @@ impl<'a> Tile<'a> {
     /// let tile = Tile::new();
     /// ```
     pub fn new() -> Self {
-        let position = Position { column: 0, row: 0 };
+        let position = Position::new();
         Tile { position, walkable: [false; 9], neighbour_top: None, neighbour_right: None, neighbour_bottom: None, neighbour_left: None }
     }
 
@@ -126,13 +128,6 @@ pub enum Direction {
     Right,
     Bottom,
     Left,
-}
-
-/// Defines the tiles position inside the maze
-#[derive(PartialEq, Debug)]
-pub struct Position {
-    pub column: u32,
-    pub row: u32,
 }
 
 #[cfg(test)]

@@ -1,5 +1,5 @@
 use tile::Tile;
-use tile::Position;
+use position::Position;
 
 /// The maze contains the tiles and calculates the walkable path based on the given tiles
 pub struct Maze<'a> {
@@ -34,14 +34,14 @@ impl<'a> Maze<'a> {
     pub fn get_tile_at_position(&mut self, position: Position) -> Option<&Tile> {
         self.tiles.iter().find(|t| t.position == position)
     }
+
 }
 
 #[cfg(test)]
 mod tests {
     use maze::Maze;
-
     use tile::Tile;
-    use tile::Position;
+    use position::Position;
 
     #[test]
     fn maze_new() {
