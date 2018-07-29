@@ -137,8 +137,8 @@ pub struct Position {
 
 #[cfg(test)]
 mod tests {
-    use super::Tile;
-    use super::Direction;
+    use tile::Tile;
+    use tile::Direction;
 
     #[test]
     fn tile_new() {
