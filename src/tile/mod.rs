@@ -11,14 +11,12 @@ pub struct Tile<'a> {
 
 impl<'a> Tile<'a> {
     /// Returns a tile at position (row: 0, column: 0) without any neighbours
-    #[allow(dead_code)]
     pub fn new() -> Self {
         let position = Position { column: 0, row: 0 };
         Tile { position, walkable: [false; 9], neighbour_top: None, neighbour_right: None, neighbour_bottom: None, neighbour_left: None }
     }
 
     /// Returns a tile at the given row and column without any neighbours
-    #[allow(dead_code)]
     pub fn with_position(column: u32, row: u32) -> Self {
         let mut tile = Tile::new();
         tile.position.column = column;
@@ -27,7 +25,6 @@ impl<'a> Tile<'a> {
     }
 
     /// Returns a tile at the given row, column and walkable without any neighbours
-    #[allow(dead_code)]
     pub fn with_position_and_walkable(column: u32, row: u32, walkable: [bool; 9]) -> Self {
         let mut tile = Tile::with_position(column, row);
         tile.walkable = walkable;
@@ -35,7 +32,6 @@ impl<'a> Tile<'a> {
     }
 
     /// Adds a tile if the given tile is a neighbour
-    #[allow(dead_code)]
     pub fn add_neighbour(&mut self, n: &'a Tile) {
         let direction = self.neighbour_at(&n);
         match direction {
@@ -45,7 +41,6 @@ impl<'a> Tile<'a> {
     }
 
     /// Adds a tile at the given position
-    #[allow(dead_code)]
     pub fn add_neighbour_at(&mut self, n: &'a Tile, d: Direction) {
         match d {
             Direction::Top => { self.neighbour_top = Some(&n) }
@@ -56,7 +51,6 @@ impl<'a> Tile<'a> {
     }
 
     /// Checks if a given tile is a neighbour and returns an Option with the direction
-    #[allow(dead_code)]
     pub fn neighbour_at(&self, n: &'a Tile) -> Option<Direction> {
         let column_diff = n.position.column as i32 - self.position.column as i32;
         let row_diff = n.position.row as i32 - self.position.row as i32;
@@ -69,6 +63,7 @@ impl<'a> Tile<'a> {
             (_, _) => None,
         }
     }
+
 }
 
 /// Defines in which direction two tiles are connected

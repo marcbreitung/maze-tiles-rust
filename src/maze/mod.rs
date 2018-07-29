@@ -7,13 +7,11 @@ pub struct Maze<'a> {
 
 impl<'a> Maze<'a> {
     /// Returns a maze
-    #[allow(dead_code)]
     pub fn new() -> Self {
         Maze { tiles: Vec::new() }
     }
 
     /// Adds a tile to the maze
-    #[allow(dead_code)]
     pub fn add_tile(&mut self, tile: Tile<'a>) {
         if !self.tiles.iter().any(|t| t.position == tile.position) {
             self.tiles.push(tile);
