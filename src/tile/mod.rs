@@ -1,4 +1,5 @@
 use position::Position;
+use direction::Direction;
 
 /// A tile defines a walkable part of the maze.
 /// # Examle
@@ -121,19 +122,12 @@ impl<'a> Tile<'a> {
     }
 }
 
-/// Defines in which direction two tiles are connected
-#[derive(PartialEq, Debug)]
-pub enum Direction {
-    Top,
-    Right,
-    Bottom,
-    Left,
-}
+
 
 #[cfg(test)]
 mod tests {
     use tile::Tile;
-    use tile::Direction;
+    use direction::Direction;
 
     #[test]
     fn tile_new() {

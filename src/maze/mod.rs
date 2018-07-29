@@ -34,7 +34,6 @@ impl<'a> Maze<'a> {
     pub fn get_tile_at_position(&mut self, position: Position) -> Option<&Tile> {
         self.tiles.iter().find(|t| t.position == position)
     }
-
 }
 
 #[cfg(test)]
