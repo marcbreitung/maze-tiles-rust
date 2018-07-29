@@ -1,17 +1,18 @@
 use tile::Tile;
 
+/// The maze contains the tiles and calculates the walkable path based on the given tiles
 pub struct Maze<'a> {
     pub tiles: Vec<Tile<'a>>
 }
 
 impl<'a> Maze<'a> {
-    // Returns a maze
+    /// Returns a maze
     #[allow(dead_code)]
     pub fn new() -> Self {
         Maze { tiles: Vec::new() }
     }
 
-    // Adds a tile to the maze
+    /// Adds a tile to the maze
     #[allow(dead_code)]
     pub fn add_tile(&mut self, tile: Tile<'a>) {
         if !self.tiles.iter().any(|t| t.position == tile.position) {
