@@ -7,7 +7,7 @@ pub struct Maze<'a> {
 }
 
 impl<'a> Maze<'a> {
-    /// Returns a maze
+    /// Returns a new maze
     pub fn new() -> Self {
         Maze { tiles: Vec::new() }
     }

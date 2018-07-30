@@ -38,6 +38,18 @@ impl<'a> Tile<'a> {
         tile
     }
 
+    /// Returns a new tile with the given walkable at position (row: 0, column: 0)
+    /// ```
+    /// use maze_tiles_rust::tile::Tile;
+    ///
+    /// let tile = Tile::with_walkable([false, true, false, true, true, true, false, true, false]);
+    /// ```
+    pub fn with_walkable(walkable: [bool; 9]) -> Self {
+        let mut tile = Tile::new();
+        tile.walkable = walkable;
+        tile
+    }
+
     /// Returns a tile at the given row, column and walkable without any neighbours
     /// ```
     /// use maze_tiles_rust::tile::Tile;
@@ -127,6 +139,12 @@ mod tests {
         let tile = Tile::with_position(1, 2);
         assert_eq!(1, tile.position.column);
         assert_eq!(2, tile.position.row);
+    }
+
+    #[test]
+    fn with_walkable() {
+        let tile = Tile::with_walkable([false, true, false, true, true, true, false, true, false]);
+        assert_eq!([false, true, false, true, true, true, false, true, false], tile.walkable);
     }
 
     #[test]
