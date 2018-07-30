@@ -2,19 +2,20 @@ use position::Position;
 use direction::Direction;
 
 /// A tile defines a walkable part of the maze.
-/// # Examle
+/// # Examples
 /// ```
 /// let tile = maze_tiles_rust::tile::Tile::new();
 /// ```
 #[derive(PartialEq, Debug)]
-pub struct Tile<'a> {
+pub struct Tile {
     pub position: Position,
     pub walkable: [bool; 9],
-    pub neighbours: Vec<&'a Tile<'a>>,
+    pub neighbours: Vec<Position>,
 }
 
-impl<'a> Tile<'a> {
+impl Tile {
     /// Returns a new tile at position (row: 0, column: 0) without any neighbours
+    /// # Examples
     /// ```
     /// use maze_tiles_rust::tile::Tile;
     ///
@@ -26,6 +27,7 @@ impl<'a> Tile<'a> {
     }
 
     /// Returns a new tile at the given row and column without any neighbours
+    /// # Examples
     /// ```
     /// use maze_tiles_rust::tile::Tile;
     ///
@@ -39,6 +41,7 @@ impl<'a> Tile<'a> {
     }
 
     /// Returns a new tile with the given walkable at position (row: 0, column: 0)
+    /// # Examples
     /// ```
     /// use maze_tiles_rust::tile::Tile;
     ///
@@ -51,6 +54,7 @@ impl<'a> Tile<'a> {
     }
 
     /// Returns a tile at the given row, column and walkable without any neighbours
+    /// # Examples
     /// ```
     /// use maze_tiles_rust::tile::Tile;
     ///
@@ -62,19 +66,19 @@ impl<'a> Tile<'a> {
         tile
     }
 
-    /// Adds a tile if the given tile is a neighbour
-    pub fn add_neighbour(&mut self, neighbour: &'a Tile) {
-        let direction = self.neighbour_at(&neighbour);
+    /// Checks if the given position is a neighbour and adds the position of a neighbour tile
+    pub fn add_neighbour_position(&mut self, position: Position) {
+        let direction = self.get_position_direction(&position);
         match direction {
-            Some(_) => self.neighbours.push(&neighbour),
+            Some(_) => self.neighbours.push(position),
             None => (),
         }
     }
 
-    /// Checks if a given tile is a neighbour and returns an Option with the direction
-    pub fn neighbour_at(&self, neighbour: &'a Tile) -> Option<Direction> {
-        let column_diff = neighbour.position.column as i32 - self.position.column as i32;
-        let row_diff = neighbour.position.row as i32 - self.position.row as i32;
+    /// Checks if a given position is a neighbour and returns an Option with the direction
+    pub fn get_position_direction(&self, position: &Position) -> Option<Direction> {
+        let column_diff = position.column as i32 - self.position.column as i32;
+        let row_diff = position.row as i32 - self.position.row as i32;
 
         match (column_diff, row_diff) {
             (0, -1) => Some(Direction::Top),
@@ -86,8 +90,8 @@ impl<'a> Tile<'a> {
     }
 
     /// Checks if two tiles have a walkable connection
-    pub fn has_walkable_neighbour(&self, neighbour: &'a Tile) -> bool {
-        let direction = self.neighbour_at(&neighbour);
+    pub fn has_walkable_neighbour(&self, neighbour: &Tile) -> bool {
+        let direction = self.get_position_direction(&neighbour.position);
         match direction {
             Some(direction) => { self.has_walkable_neighbour_at_direction(&neighbour, direction) }
             None => { false }
@@ -95,7 +99,7 @@ impl<'a> Tile<'a> {
     }
 
     /// Checks if two tiles have a walkable connection at a given direction
-    pub fn has_walkable_neighbour_at_direction(&self, n: &'a Tile, direction: Direction) -> bool {
+    pub fn has_walkable_neighbour_at_direction(&self, n: &Tile, direction: Direction) -> bool {
         match direction {
             Direction::Top => {
                 self.walkable[0] == true && n.walkable[6] == true ||
@@ -125,6 +129,7 @@ impl<'a> Tile<'a> {
 #[cfg(test)]
 mod tests {
     use tile::Tile;
+    use position::Position;
 
     #[test]
     fn tile_new() {
@@ -157,10 +162,9 @@ mod tests {
 
     #[test]
     fn tile_add_neighbour() {
-        let tile_a = Tile::with_position(0, 1);
-        let mut tile_b = Tile::with_position(1, 1);
-        tile_b.add_neighbour(&tile_a);
-        assert_eq!(1, tile_b.neighbours.len());
+        let mut tile_a = Tile::with_position(0, 0);
+        tile_a.add_neighbour_position(Position { column: 1, row: 0 });
+        assert_eq!(1, tile_a.neighbours.len());
     }
 
     #[test]

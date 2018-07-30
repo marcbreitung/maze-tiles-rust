@@ -2,25 +2,25 @@ use tile::Tile;
 use position::Position;
 
 /// The maze contains the tiles and calculates the walkable path based on the given tiles
-pub struct Maze<'a> {
-    pub tiles: Vec<Tile<'a>>
+pub struct Maze {
+    pub tiles: Vec<Tile>
 }
 
-impl<'a> Maze<'a> {
+impl Maze {
     /// Returns a new maze
     pub fn new() -> Self {
         Maze { tiles: Vec::new() }
     }
 
     /// Adds a tile to the maze
-    pub fn add_tile(&mut self, tile: Tile<'a>) {
+    pub fn add_tile(&mut self, tile: Tile) {
         if !self.tiles.iter().any(|t| t.position == tile.position) {
             self.tiles.push(tile);
         }
     }
 
     /// Adds a tile to the maze at the given position
-    pub fn add_tile_at_position(&mut self, mut tile: Tile<'a>, position: Position) {
+    pub fn add_tile_at_position(&mut self, mut tile: Tile, position: Position) {
         tile.position = position;
         self.add_tile(tile);
     }
