@@ -10,10 +10,7 @@ use direction::Direction;
 pub struct Tile<'a> {
     pub position: Position,
     pub walkable: [bool; 9],
-    pub neighbour_top: Option<&'a Tile<'a>>,
-    pub neighbour_right: Option<&'a Tile<'a>>,
-    pub neighbour_bottom: Option<&'a Tile<'a>>,
-    pub neighbour_left: Option<&'a Tile<'a>>,
+    pub neighbours: Vec<&'a Tile<'a>>,
 }
 
 impl<'a> Tile<'a> {
@@ -25,7 +22,7 @@ impl<'a> Tile<'a> {
     /// ```
     pub fn new() -> Self {
         let position = Position::new();
-        Tile { position, walkable: [false; 9], neighbour_top: None, neighbour_right: None, neighbour_bottom: None, neighbour_left: None }
+        Tile { position, walkable: [false; 9], neighbours: Vec::new() }
     }
 
     /// Returns a new tile at the given row and column without any neighbours
@@ -57,18 +54,8 @@ impl<'a> Tile<'a> {
     pub fn add_neighbour(&mut self, neighbour: &'a Tile) {
         let direction = self.neighbour_at(&neighbour);
         match direction {
-            Some(direction) => self.add_neighbour_at(&neighbour, direction),
+            Some(_) => self.neighbours.push(&neighbour),
             None => (),
-        }
-    }
-
-    /// Adds a tile at the given position
-    pub fn add_neighbour_at(&mut self, neighbour: &'a Tile, direction: Direction) {
-        match direction {
-            Direction::Top => { self.neighbour_top = Some(&neighbour) }
-            Direction::Right => { self.neighbour_right = Some(&neighbour) }
-            Direction::Bottom => { self.neighbour_bottom = Some(&neighbour) }
-            Direction::Left => { self.neighbour_left = Some(&neighbour) }
         }
     }
 
@@ -123,21 +110,16 @@ impl<'a> Tile<'a> {
 }
 
 
-
 #[cfg(test)]
 mod tests {
     use tile::Tile;
-    use direction::Direction;
 
     #[test]
     fn tile_new() {
         let tile = Tile::new();
         assert_eq!(0, tile.position.row);
         assert_eq!(0, tile.position.column);
-        assert_eq!(Option::None, tile.neighbour_top);
-        assert_eq!(Option::None, tile.neighbour_right);
-        assert_eq!(Option::None, tile.neighbour_bottom);
-        assert_eq!(Option::None, tile.neighbour_left);
+        assert_eq!(0, tile.neighbours.len());
     }
 
     #[test]
@@ -157,52 +139,10 @@ mod tests {
 
     #[test]
     fn tile_add_neighbour() {
-        let tile_a = Tile::new();
-        let mut tile_b = Tile::new();
-        tile_b.add_neighbour_at(&tile_a, Direction::Top);
-        tile_b.add_neighbour_at(&tile_a, Direction::Right);
-        tile_b.add_neighbour_at(&tile_a, Direction::Bottom);
-        tile_b.add_neighbour_at(&tile_a, Direction::Left);
-
-        assert_eq!(Option::Some(&tile_a), tile_b.neighbour_top);
-        assert_eq!(Option::Some(&tile_a), tile_b.neighbour_right);
-        assert_eq!(Option::Some(&tile_a), tile_b.neighbour_bottom);
-        assert_eq!(Option::Some(&tile_a), tile_b.neighbour_left);
-    }
-
-    #[test]
-    fn neighbour_at_same_position() {
-        let tile_a = Tile::new();
-        let tile_b = Tile::new();
-        assert_eq!(Option::None, tile_b.neighbour_at(&tile_a));
-    }
-
-    #[test]
-    fn neighbour_at_top() {
-        let tile_a = Tile::with_position(1, 1);
-        let tile_b = Tile::with_position(1, 2);
-        assert_eq!(Some(Direction::Top), tile_b.neighbour_at(&tile_a));
-    }
-
-    #[test]
-    fn neighbour_at_right() {
-        let tile_a = Tile::with_position(2, 1);
-        let tile_b = Tile::with_position(1, 1);
-        assert_eq!(Some(Direction::Right), tile_b.neighbour_at(&tile_a));
-    }
-
-    #[test]
-    fn neighbour_at_bottom() {
-        let tile_a = Tile::with_position(1, 2);
-        let tile_b = Tile::with_position(1, 1);
-        assert_eq!(Some(Direction::Bottom), tile_b.neighbour_at(&tile_a));
-    }
-
-    #[test]
-    fn neighbour_at_left() {
-        let tile_a = Tile::with_position(1, 1);
-        let tile_b = Tile::with_position(2, 1);
-        assert_eq!(Some(Direction::Left), tile_b.neighbour_at(&tile_a));
+        let tile_a = Tile::with_position(0, 1);
+        let mut tile_b = Tile::with_position(1, 1);
+        tile_b.add_neighbour(&tile_a);
+        assert_eq!(1, tile_b.neighbours.len());
     }
 
     #[test]
