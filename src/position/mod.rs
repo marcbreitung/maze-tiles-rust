@@ -1,7 +1,7 @@
 use direction::Direction;
 
 /// Defines the tiles position inside the maze
-#[derive(PartialEq, Debug)]
+#[derive(PartialEq, Debug, Copy, Clone)]
 pub struct Position {
     pub column: u32,
     pub row: u32,
@@ -13,7 +13,7 @@ impl Position {
         Position { column: 0, row: 0 }
     }
     /// Returns a vector with positions from direct neighbours as tuples
-    pub fn get_neighbours_positions(&self) -> Vec<(Direction, Position)> {
+    pub fn get_neighbours_positions(&self) -> Vec<Position> {
         let mut result = Vec::new();
         let directions = Direction::get_directions();
         let columns = vec![self.column as i32, self.column as i32 + 1, self.column as i32, self.column as i32 - 1];
@@ -21,14 +21,14 @@ impl Position {
 
         let directions_positions = directions.iter().zip(columns.iter().zip(rows.iter()));
 
-        for direction_position in directions_positions {
-            let positions = direction_position.1;
-            if *positions.1 >= 0 && *positions.0 >= 0 {
-                match direction_position.0 {
-                    Direction::Top => { result.push((Direction::Top, Position { column: *positions.0 as u32, row: *positions.1 as u32 })); }
-                    Direction::Right => { result.push((Direction::Right, Position { column: *positions.0 as u32, row: *positions.1 as u32 })); }
-                    Direction::Bottom => { result.push((Direction::Bottom, Position { column: *positions.0 as u32, row: *positions.1 as u32 })); }
-                    Direction::Left => { result.push((Direction::Left, Position { column: *positions.0 as u32, row: *positions.1 as u32 })); }
+        for (direction, position) in directions_positions {
+            let (column, row) = position;
+            if *column >= 0 && *row >= 0 {
+                match direction {
+                    Direction::Top => { result.push(Position { column: *column as u32, row: *row as u32 }); }
+                    Direction::Right => { result.push(Position { column: *column as u32, row: *row as u32 }); }
+                    Direction::Bottom => { result.push(Position { column: *column as u32, row: *row as u32 }); }
+                    Direction::Left => { result.push(Position { column: *column as u32, row: *row as u32 }); }
                 }
             }
         }
@@ -40,7 +40,6 @@ impl Position {
 #[cfg(test)]
 mod tests {
     use position::Position;
-    use direction::Direction;
 
     #[test]
     fn position_new() {
@@ -53,10 +52,10 @@ mod tests {
     fn get_neighbours_positions() {
         let position = Position { column: 2, row: 2 };
         assert_eq!(vec![
-            (Direction::Top, Position { column: 2, row: 1 }),
-            (Direction::Right, Position { column: 3, row: 2 }),
-            (Direction::Bottom, Position { column: 2, row: 3 }),
-            (Direction::Left, Position { column: 1, row: 2 })
+            Position { column: 2, row: 1 },
+            Position { column: 3, row: 2 },
+            Position { column: 2, row: 3 },
+            Position { column: 1, row: 2 }
         ], position.get_neighbours_positions());
     }
 }

@@ -22,17 +22,23 @@ impl Maze {
     /// Adds a tile to the maze at the given position
     pub fn add_tile_at_position(&mut self, mut tile: Tile, position: Position) {
         tile.position = position;
+        self.update_tile(&mut tile);
         self.add_tile(tile);
     }
 
     /// Checks if tile at given position already exists
-    pub fn has_tile_at_position(&mut self, position: Position) -> bool {
-        self.tiles.iter().any(|t| t.position == position)
+    pub fn has_tile_at_position(&self, position: &Position) -> bool {
+        self.tiles.iter().any(|t| t.position == *position)
     }
 
-    /// Returns a reference to the tile at the given position
-    pub fn get_tile_at_position(&mut self, position: Position) -> Option<&Tile> {
-        self.tiles.iter().find(|t| t.position == position)
+    /// Updates the neighbours
+    fn update_tile(&mut self, tile: &mut Tile) {
+        let positions = tile.position.get_neighbours_positions();
+        for position in positions.iter() {
+            if self.has_tile_at_position(&position) {
+                tile.neighbours.push(*position);
+            }
+        }
     }
 }
 
@@ -73,21 +79,20 @@ mod tests {
     #[test]
     fn has_tile_at_position() {
         let mut maze = Maze::new();
+        let position_true = Position { column: 1, row: 1 };
+        let position_false = Position { column: 2, row: 2 };
 
-        maze.add_tile_at_position(Tile::new(), Position { column: 1, row: 1 });
+        maze.add_tile_at_position(Tile::new(), position_true);
 
-        assert_eq!(true, maze.has_tile_at_position(Position { column: 1, row: 1 }));
-        assert_eq!(false, maze.has_tile_at_position(Position { column: 5, row: 5 }));
+        assert_eq!(true, maze.has_tile_at_position(&position_true));
+        assert_eq!(false, maze.has_tile_at_position(&position_false));
     }
 
     #[test]
-    fn get_tile_at_position() {
+    fn update_tile() {
         let mut maze = Maze::new();
-        let tile = Tile::with_position(1, 1);
-
-        maze.add_tile_at_position(Tile::new(), Position { column: 1, row: 1 });
-
-        assert_eq!(Some(&tile), maze.get_tile_at_position(Position { column: 1, row: 1 }));
-        assert_eq!(None, maze.get_tile_at_position(Position { column: 2, row: 1 }));
+        maze.add_tile_at_position(Tile::with_walkable([false, true, false, false, true, true, false, false, false]), Position { column: 0, row: 0 });
+        maze.add_tile_at_position(Tile::with_walkable([false, false, false, true, true, true, false, false, false]), Position { column: 1, row: 0 });
+        maze.add_tile_at_position(Tile::with_walkable([false, false, false, true, true, true, false, false, false]), Position { column: 2, row: 0 });
     }
 }
