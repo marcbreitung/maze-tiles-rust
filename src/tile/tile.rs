@@ -1,7 +1,7 @@
 use tile::field::Field;
 use tile::position::Position;
 use tile::size::Size;
-use std::fmt::{Debug, Formatter};
+use std::fmt::{Debug};
 
 #[derive(Debug)]
 pub struct Tile {

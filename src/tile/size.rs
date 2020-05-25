@@ -1,4 +1,4 @@
-#[derive(Debug)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct Size {
     pub width: u32,
     pub height: u32,
@@ -33,5 +33,4 @@ mod tests {
         let size = Size::new(3, 3);
         assert_eq!(9, size.len());
     }
-
 }
