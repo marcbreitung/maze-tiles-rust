@@ -1,9 +1,8 @@
 use tile::field::Field;
 use tile::position::Position;
 use tile::size::Size;
-use std::fmt::{Debug};
 
-#[derive(Debug)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct Tile {
     pub position: Position,
     pub size: Size,
@@ -18,6 +17,18 @@ impl Tile {
             fields,
         }
     }
+
+    pub fn new_path() -> Self {
+        Self {
+            position: Position::new(0,0),
+            size: Size::new(3,3),
+            fields: vec![
+                Field::Ground, Field::Path, Field::Ground,
+                Field::Ground, Field::Path, Field::Ground,
+                Field::Ground, Field::Path, Field::Ground,
+            ],
+        }
+    }
 }
 
 #[cfg(test)]
@@ -28,7 +39,7 @@ mod tests {
     use tile::tile::Tile;
 
     #[test]
-    fn position_new() {
+    fn tile_new() {
         let position = Position::new(0, 0);
         let size = Size::new(3, 3);
         let fields = vec![
