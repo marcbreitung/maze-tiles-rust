@@ -19,6 +19,23 @@ impl Tile {
         }
     }
 
+    /// Returns a tile with a path
+    ///
+    /// # Example
+    /// ```
+    /// use maze_tiles_rust::tile::tile::Tile;
+    /// use maze_tiles_rust::tile::field::Field;
+    ///
+    /// let tile = Tile::new_path();
+    ///
+    /// let path = vec![
+    ///  Field::Ground, Field::Path, Field::Ground,
+    ///  Field::Ground, Field::Path, Field::Ground,
+    ///  Field::Ground, Field::Path, Field::Ground,
+    /// ];
+    ///
+    /// assert_eq!(path, tile.fields);
+    /// ```
     pub fn new_path() -> Self {
         Self {
             position: Position::new(0, 0),
@@ -31,6 +48,33 @@ impl Tile {
         }
     }
 
+    /// Rotates a tile clickwise 90 degrees
+    ///
+    /// # Example
+    /// ```
+    /// use maze_tiles_rust::tile::tile::Tile;
+    /// use maze_tiles_rust::tile::field::Field;
+    ///
+    /// let mut tile = Tile::new_path();
+    ///
+    /// let path = vec![
+    ///  Field::Ground, Field::Path, Field::Ground,
+    ///  Field::Ground, Field::Path, Field::Ground,
+    ///  Field::Ground, Field::Path, Field::Ground,
+    /// ];
+    ///
+    /// assert_eq!(path, tile.fields);
+    ///
+    /// tile.rotate();
+    ///
+    /// let rotated_fields = vec![
+    ///  Field::Ground, Field::Ground, Field::Ground,
+    ///  Field::Path,   Field::Path,   Field::Path,
+    ///  Field::Ground, Field::Ground, Field::Ground,
+    /// ];
+    ///
+    /// assert_eq!(rotated_fields, tile.fields);
+    /// ```
     pub fn rotate(&mut self) {
         let mut rotated = vec![vec![Field::None; self.size.width as usize]; self.size.height as usize];
         for (row_index, row) in self.fields.chunks(self.size.width as usize).enumerate() {
