@@ -1,7 +1,6 @@
 use tile::field::Field;
 use tile::position::Position;
 use tile::size::Size;
-use tile::field::Field::Path;
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct Tile {
@@ -48,7 +47,7 @@ impl Tile {
         }
     }
 
-    /// Rotates a tile clickwise 90 degrees
+    /// Rotates a tile clockwise in 90 degrees
     ///
     /// # Example
     /// ```
