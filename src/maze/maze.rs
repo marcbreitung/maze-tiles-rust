@@ -21,6 +21,13 @@ impl Maze {
         }
     }
 
+    pub fn get_tile_at_position(&mut self, position: Position) -> Option<Tile> {
+        if let Some(tile) = self.tiles.get(&position) {
+            return Some(tile.clone());
+        }
+        None
+    }
+
     pub fn add_tile(&mut self, tile: Tile) {
         self.tiles.insert(tile.position.clone(), tile);
     }
@@ -82,5 +89,14 @@ mod test {
         let path = maze.get_path();
         assert_eq!(Field::Ground, path[0]);
         assert_eq!(Field::Path, path[1]);
+    }
+
+    #[test]
+    fn get_tile_at_position() {
+        let mut maze = Maze::new(10, 10);
+        maze.add_tile(Tile::new_path());
+        if let Some(tile) = maze.get_tile_at_position(Position::new(0,0)) {
+            assert_eq!(Field::Ground, tile.fields[0]);
+        };
     }
 }
