@@ -106,6 +106,19 @@ mod test {
         maze.add_tile(Tile::new_path());
         if let Some(tile) = maze.get_tile_at_position(Position::new(0, 0)) {
             assert_eq!(Field::Ground, tile.fields[0]);
+            assert_eq!(Field::Path, tile.fields[1]);
+        };
+    }
+
+    #[test]
+    fn get_tile_at_position_added_rotated() {
+        let mut maze = Maze::new(10, 10);
+        maze.add_tile(Tile::new_path());
+        if let Some(mut tile) = maze.get_tile_at_position(Position::new(0, 0)) {
+            assert_eq!(Field::Path, tile.fields[1]);
+            tile.rotate();
+            assert_eq!(Field::Ground, tile.fields[1]);
+            maze.add_tile(tile);
         };
     }
 }
