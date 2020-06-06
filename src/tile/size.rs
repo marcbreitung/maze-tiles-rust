@@ -5,13 +5,12 @@ pub struct Size {
 }
 
 impl Size {
+    /// Returns a size
     pub fn new(width: u32, height: u32) -> Self {
-        Self {
-            width,
-            height,
-        }
+        Self { width, height }
     }
 
+    /// Returns the length (width * height)
     pub fn len(&self) -> usize {
         (self.width * self.height) as usize
     }

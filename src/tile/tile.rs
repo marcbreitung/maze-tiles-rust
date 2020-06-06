@@ -10,6 +10,28 @@ pub struct Tile {
 }
 
 impl Tile {
+    /// Returns a new tile with the defaults
+    ///
+    /// * position at 0 0
+    /// * size 3x3
+    /// * fields Field::None
+    ///
+    /// # Example
+    /// ```
+    /// use maze_tiles_rust::tile::position::Position;
+    /// use maze_tiles_rust::tile::size::Size;
+    /// use maze_tiles_rust::tile::field::Field;
+    /// use maze_tiles_rust::tile::tile::Tile;
+    ///
+    /// let position = Position::new(0, 0);
+    /// let size = Size::new(3, 3);
+    /// let fields = vec![
+    ///     Field::Ground, Field::Path, Field::Ground,
+    ///     Field::Path, Field::Path, Field::Path,
+    ///     Field::Ground, Field::Path, Field::Ground,
+    /// ];
+    /// let tile = Tile::new(position, size, fields);
+    /// ```
     pub fn new(position: Position, size: Size, fields: Vec<Field>) -> Self {
         Self {
             position,
@@ -75,7 +97,8 @@ impl Tile {
     /// assert_eq!(rotated_fields, tile.fields);
     /// ```
     pub fn rotate(&mut self) {
-        let mut rotated = vec![vec![Field::None; self.size.width as usize]; self.size.height as usize];
+        let mut rotated =
+            vec![vec![Field::None; self.size.width as usize]; self.size.height as usize];
         for (row_index, row) in self.fields.chunks(self.size.width as usize).enumerate() {
             for (column_index, column) in row.iter().enumerate() {
                 rotated[column_index][row.len() - 1 - row_index] = *column;

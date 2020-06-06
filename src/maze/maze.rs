@@ -15,10 +15,7 @@ impl Maze {
     pub fn new(width: u32, height: u32) -> Self {
         let size = Size::new(width, height);
         let tiles = HashMap::new();
-        Self {
-            size,
-            tiles,
-        }
+        Self { size, tiles }
     }
 
     pub fn get_tile_at_position(&mut self, position: Position) -> Option<Tile> {
@@ -95,7 +92,7 @@ mod test {
     fn get_tile_at_position() {
         let mut maze = Maze::new(10, 10);
         maze.add_tile(Tile::new_path());
-        if let Some(tile) = maze.get_tile_at_position(Position::new(0,0)) {
+        if let Some(tile) = maze.get_tile_at_position(Position::new(0, 0)) {
             assert_eq!(Field::Ground, tile.fields[0]);
         };
     }
