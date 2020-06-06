@@ -29,6 +29,18 @@ impl Maze {
         self.tiles.insert(tile.position.clone(), tile);
     }
 
+    /// Returns the maze as a flat vector
+    ///
+    /// # Examle
+    ///
+    /// ```
+    /// use maze_tiles_rust::maze::maze::Maze;
+    /// use maze_tiles_rust::tile::tile::Tile;
+    ///
+    /// let mut maze = Maze::new(10, 10);
+    /// maze.add_tile(Tile::new_path());
+    /// let path = maze.get_path();
+    /// ```
     pub fn get_path(&self) -> Vec<Field> {
         let mut fields = vec![Field::None; self.size.len()];
         for (_, tile) in self.tiles.iter().clone() {
