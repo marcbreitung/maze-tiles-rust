@@ -9,6 +9,7 @@ use tile::Tile;
 pub struct Maze {
     size: Size,
     tile_size: Size,
+    field_size: Size,
     tiles: HashMap<Position, Tile>,
 }
 
@@ -16,15 +17,17 @@ impl Maze {
     pub fn new(width: u32, height: u32) -> Self {
         let size = Size::new(width, height);
         let tile_size = Size::new(3, 3);
+        let field_size = Size::new(10, 10);
         let tiles = HashMap::new();
         Self {
             size,
             tile_size,
+            field_size,
             tiles,
         }
     }
 
-    /// Returns the tile at the given position
+    /// Returns the ``tile::Tile`` at the given position
     ///
     /// # Example
     ///
@@ -48,7 +51,7 @@ impl Maze {
         None
     }
 
-    /// Returns the tile at the given index
+    /// Returns the ``tile::Tile`` at the given index
     ///
     /// # Examle
     ///
@@ -77,6 +80,7 @@ impl Maze {
         self.get_tile_at_position(position)
     }
 
+    /// Adds a ``tile::Tile`` to the maze
     pub fn add_tile(&mut self, tile: Tile) {
         self.tiles.insert(tile.position.clone(), tile);
     }
