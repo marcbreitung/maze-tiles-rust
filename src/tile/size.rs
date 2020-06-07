@@ -14,6 +14,11 @@ impl Size {
     pub fn len(&self) -> usize {
         (self.width * self.height) as usize
     }
+
+    /// Checks if the size is empty
+    pub fn is_empty(&self) -> bool {
+        (self.width * self.height) == 0
+    }
 }
 
 #[cfg(test)]
@@ -28,8 +33,14 @@ mod tests {
     }
 
     #[test]
-    fn position_length() {
+    fn position_len() {
         let size = Size::new(3, 3);
         assert_eq!(9, size.len());
+    }
+
+    #[test]
+    fn position_is_empty() {
+        let size = Size::new(0, 0);
+        assert_eq!(true, size.is_empty());
     }
 }

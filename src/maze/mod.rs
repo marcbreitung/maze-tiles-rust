@@ -17,9 +17,30 @@ impl Maze {
         let size = Size::new(width, height);
         let tile_size = Size::new(3, 3);
         let tiles = HashMap::new();
-        Self { size, tile_size, tiles }
+        Self {
+            size,
+            tile_size,
+            tiles,
+        }
     }
 
+    /// Returns the tile at the given position
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use maze_tiles_rust::maze::Maze;
+    /// use maze_tiles_rust::tile::Tile;
+    /// use maze_tiles_rust::tile::field::Field;
+    /// use maze_tiles_rust::tile::position::Position;
+    ///
+    /// let mut maze = Maze::new(9, 9);
+    /// maze.add_tile(Tile::new_path());
+    ///
+    /// if let Some(mut tile) = maze.get_tile_at_position(Position::new(0, 0)) {
+    ///     assert_eq!(Field::Path, tile.fields[1]);
+    /// };
+    /// ```
     pub fn get_tile_at_position(&self, position: Position) -> Option<Tile> {
         if let Some(tile) = self.tiles.get(&position) {
             return Some(tile.clone());
@@ -41,12 +62,12 @@ impl Maze {
     /// tile.position = Position::new(1, 0);
     /// let mut maze = Maze::new(9, 9);
     /// maze.add_tile(tile);
+    ///
     /// if let Some(tile) = maze.get_tile_at_index(21) {
     ///     assert_eq!(Field::Ground, tile.fields[0]);
     ///     assert_eq!(Field::Path, tile.fields[1]);
     /// };
     /// ```
-
     pub fn get_tile_at_index(&self, index: u32) -> Option<Tile> {
         let row = (index as f32 / self.size.height as f32).floor() as u32;
         let col = index - (row * self.size.width);
