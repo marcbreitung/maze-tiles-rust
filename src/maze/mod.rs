@@ -8,14 +8,16 @@ use tile::Tile;
 #[derive(Debug, Clone, PartialEq)]
 pub struct Maze {
     size: Size,
+    tile_size: Size,
     tiles: HashMap<Position, Tile>,
 }
 
 impl Maze {
     pub fn new(width: u32, height: u32) -> Self {
         let size = Size::new(width, height);
+        let tile_size = Size::new(3, 3);
         let tiles = HashMap::new();
-        Self { size, tiles }
+        Self { size, tile_size, tiles }
     }
 
     pub fn get_tile_at_position(&self, position: Position) -> Option<Tile> {
@@ -23,6 +25,35 @@ impl Maze {
             return Some(tile.clone());
         }
         None
+    }
+
+    /// Returns the tile at the given index
+    ///
+    /// # Examle
+    ///
+    /// ```
+    /// use maze_tiles_rust::tile::Tile;
+    /// use maze_tiles_rust::tile::position::Position;
+    /// use maze_tiles_rust::maze::Maze;
+    /// use maze_tiles_rust::tile::field::Field;
+    ///
+    /// let mut tile = Tile::new_path();
+    /// tile.position = Position::new(1, 0);
+    /// let mut maze = Maze::new(9, 9);
+    /// maze.add_tile(tile);
+    /// if let Some(tile) = maze.get_tile_at_index(21) {
+    ///     assert_eq!(Field::Ground, tile.fields[0]);
+    ///     assert_eq!(Field::Path, tile.fields[1]);
+    /// };
+    /// ```
+
+    pub fn get_tile_at_index(&self, index: u32) -> Option<Tile> {
+        let row = (index as f32 / self.size.height as f32).floor() as u32;
+        let col = index - (row * self.size.width);
+        let tile_row = row / self.tile_size.height;
+        let tile_col = col / self.tile_size.width;
+        let position = Position::new(tile_col, tile_row);
+        self.get_tile_at_position(position)
     }
 
     pub fn add_tile(&mut self, tile: Tile) {
@@ -72,28 +103,28 @@ mod test {
 
     #[test]
     fn maze_new() {
-        let maze = Maze::new(10, 10);
-        assert_eq!(10, maze.size.width);
-        assert_eq!(10, maze.size.width);
+        let maze = Maze::new(9, 9);
+        assert_eq!(9, maze.size.width);
+        assert_eq!(9, maze.size.width);
     }
 
     #[test]
     fn add_tile() {
-        let mut maze = Maze::new(10, 10);
+        let mut maze = Maze::new(9, 9);
         maze.add_tile(Tile::new_path());
         assert_eq!(1, maze.tiles.len());
     }
 
     #[test]
     fn maze_get_index() {
-        let maze = Maze::new(10, 10);
+        let maze = Maze::new(9, 9);
         let position = Position::new(5, 5);
-        assert_eq!(55, maze.get_index(position));
+        assert_eq!(50, maze.get_index(position));
     }
 
     #[test]
     fn get_path() {
-        let mut maze = Maze::new(10, 10);
+        let mut maze = Maze::new(9, 9);
         maze.add_tile(Tile::new_path());
         let path = maze.get_path();
         assert_eq!(Field::Ground, path[0]);
@@ -102,7 +133,7 @@ mod test {
 
     #[test]
     fn get_tile_at_position() {
-        let mut maze = Maze::new(10, 10);
+        let mut maze = Maze::new(9, 9);
         maze.add_tile(Tile::new_path());
         if let Some(tile) = maze.get_tile_at_position(Position::new(0, 0)) {
             assert_eq!(Field::Ground, tile.fields[0]);
@@ -112,13 +143,25 @@ mod test {
 
     #[test]
     fn get_tile_at_position_added_rotated() {
-        let mut maze = Maze::new(10, 10);
+        let mut maze = Maze::new(9, 9);
         maze.add_tile(Tile::new_path());
         if let Some(mut tile) = maze.get_tile_at_position(Position::new(0, 0)) {
             assert_eq!(Field::Path, tile.fields[1]);
             tile.rotate();
             assert_eq!(Field::Ground, tile.fields[1]);
             maze.add_tile(tile);
+        };
+    }
+
+    #[test]
+    fn get_tile_at_index() {
+        let mut tile = Tile::new_path();
+        tile.position = Position::new(1, 0);
+        let mut maze = Maze::new(9, 9);
+        maze.add_tile(tile);
+        if let Some(tile) = maze.get_tile_at_index(21) {
+            assert_eq!(Field::Ground, tile.fields[0]);
+            assert_eq!(Field::Path, tile.fields[1]);
         };
     }
 }
