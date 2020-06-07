@@ -81,6 +81,15 @@ impl Maze {
     }
 
     /// Adds a ``tile::Tile`` to the maze
+    ///
+    /// # Example
+    /// ```
+    /// use maze_tiles_rust::maze::Maze;
+    /// use maze_tiles_rust::tile::Tile;
+    ///
+    /// let mut maze = Maze::new(9, 9);
+    /// maze.add_tile(Tile::new_path());
+    /// ```
     pub fn add_tile(&mut self, tile: Tile) {
         self.tiles.insert(tile.position.clone(), tile);
     }
