@@ -94,6 +94,15 @@ impl Maze {
         self.tiles.insert(tile.position.clone(), tile);
     }
 
+    pub fn get_field_at_position(&self, position: Position) -> Option<Field> {
+        let index = self.get_index(position);
+        let path = self.get_path();
+        if let Some(field) = path.get(index) {
+           return Some(field.clone());
+        }
+        None
+    }
+
     /// Returns the maze as a flat vector
     ///
     /// # Examle
@@ -196,6 +205,15 @@ mod test {
         if let Some(tile) = maze.get_tile_at_index(21) {
             assert_eq!(Field::Ground, tile.fields[0]);
             assert_eq!(Field::Path, tile.fields[1]);
+        };
+    }
+
+    #[test]
+    fn get_field_at_index() {
+        let mut maze = Maze::new(9, 9);
+        maze.add_tile(Tile::new_path());
+        if let Some(field) = maze.get_field_at_position(Position::new(1,0)) {
+            assert_eq!(Field::Path, field);
         };
     }
 }
