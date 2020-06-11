@@ -9,7 +9,6 @@ use tile::Tile;
 pub struct Maze {
     size: Size,
     tile_size: Size,
-    field_size: Size,
     tiles: HashMap<Position, Tile>,
 }
 
@@ -17,12 +16,10 @@ impl Maze {
     pub fn new(width: u32, height: u32) -> Self {
         let size = Size::new(width, height);
         let tile_size = Size::new(3, 3);
-        let field_size = Size::new(10, 10);
         let tiles = HashMap::new();
         Self {
             size,
             tile_size,
-            field_size,
             tiles,
         }
     }
@@ -94,6 +91,22 @@ impl Maze {
         self.tiles.insert(tile.position.clone(), tile);
     }
 
+    /// Returns the ``Field`` at a given ``Position``
+    ///
+    /// # Examle
+    ///
+    /// ```
+    /// use maze_tiles_rust::maze::Maze;
+    /// use maze_tiles_rust::tile::Tile;
+    /// use maze_tiles_rust::tile::position::Position;
+    /// use maze_tiles_rust::tile::field::Field;
+    ///
+    /// let mut maze = Maze::new(9, 9);
+    /// maze.add_tile(Tile::new_path());
+    /// if let Some(field) = maze.get_field_at_position(Position::new(1,0)) {
+    ///     assert_eq!(Field::Path, field);
+    /// };
+    /// ```
     pub fn get_field_at_position(&self, position: Position) -> Option<Field> {
         let index = self.get_index(position);
         let path = self.get_path();
@@ -209,7 +222,7 @@ mod test {
     }
 
     #[test]
-    fn get_field_at_index() {
+    fn get_field_at_position() {
         let mut maze = Maze::new(9, 9);
         maze.add_tile(Tile::new_path());
         if let Some(field) = maze.get_field_at_position(Position::new(1,0)) {
