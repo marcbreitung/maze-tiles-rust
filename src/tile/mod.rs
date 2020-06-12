@@ -79,6 +79,19 @@ impl Tile {
         }
     }
 
+    pub fn new_path_at_position(x: u32, y: u32) -> Self {
+        let mut tile = Tile::new_path();
+        tile.position = Position::new(x, y);
+        tile
+    }
+
+    pub fn get_origin(&self) -> Position {
+        Position::new(
+            self.position.x * self.size.width,
+            self.position.y * self.size.height,
+        )
+    }
+
     /// Rotates a tile clockwise in 90 degrees
     ///
     /// # Example

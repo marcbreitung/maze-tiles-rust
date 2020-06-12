@@ -111,7 +111,7 @@ impl Maze {
         let index = self.get_index(position);
         let path = self.get_path();
         if let Some(field) = path.get(index) {
-           return Some(field.clone());
+            return Some(*field);
         }
         None
     }
@@ -137,7 +137,8 @@ impl Maze {
                     row += 1;
                 }
                 let position = Position::new((index % (tile.size.width) as usize) as u32, row);
-                if let Some(field_element) = fields.get_mut(self.get_index(position.clone())) {
+                let origin = tile.get_origin() + position;
+                if let Some(field_element) = fields.get_mut(self.get_index(origin.clone())) {
                     *field_element = *field;
                 }
             }
@@ -169,6 +170,15 @@ mod test {
         let mut maze = Maze::new(9, 9);
         maze.add_tile(Tile::new_path());
         assert_eq!(1, maze.tiles.len());
+    }
+
+    #[test]
+    fn add_tile_position() {
+        let mut maze = Maze::new(9, 9);
+        maze.add_tile(Tile::new_path_at_position(2, 2));
+        let path = maze.get_path();
+        assert_eq!(Field::Ground, path[60]);
+        assert_eq!(Field::Path, path[61]);
     }
 
     #[test]
@@ -225,7 +235,7 @@ mod test {
     fn get_field_at_position() {
         let mut maze = Maze::new(9, 9);
         maze.add_tile(Tile::new_path());
-        if let Some(field) = maze.get_field_at_position(Position::new(1,0)) {
+        if let Some(field) = maze.get_field_at_position(Position::new(1, 0)) {
             assert_eq!(Field::Path, field);
         };
     }
