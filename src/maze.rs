@@ -21,9 +21,9 @@ impl Maze {
     /// let maze = Maze::new(20, 10);
     /// assert!(maze.tiles.capacity() >= 200);
     /// ```
-    pub fn new(width: u32, height: u32) -> Self {
-        let tiles = HashMap::with_capacity((width * height) as usize);
-        let size = Size::new(width, height);
+    pub fn new(columns: u32, rows: u32) -> Self {
+        let tiles = HashMap::with_capacity((columns * rows) as usize);
+        let size = Size::new(columns, rows);
         Self {
             tiles,
             size,
