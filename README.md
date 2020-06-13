@@ -4,34 +4,40 @@
 
 A maze contains multiple tiles (red outline), each tile is divided into fields (black outline), which can be walkable. 
 
-## Tile
+## Tile 
+
+The ``tile::Tile`` is the basic unit for the maze.
 
 ![a tile](tile.svg)
 
-````rust
-use maze_tiles_rust::tile::position::Position;
-use maze_tiles_rust::tile::size::Size;
-use maze_tiles_rust::tile::field::Field;
-use maze_tiles_rust::tile::tile::Tile;
+```rust
+let tile = Tile::new(Position::new(1, 2), Field::Ground);
+```
 
-let position = Position::new(0, 0);
-let size = Size::new(3, 3);
+## Tile Group
+
+The ``tile_group::TileGroup`` is a group of multiple ``tile::Tile`` items.
+
+![a tile group](tile_group.svg)
+
+```rust
 let fields = vec![
     Field::Ground, Field::Path, Field::Ground,
     Field::Ground, Field::Path, Field::Ground,
     Field::Ground, Field::Path, Field::Ground,
 ];
-let tile = Tile::new(position, size, fields);
-````
+let tile_group = TileGroup::new(Position::new(0, 1), Size::new(3, 3), fields);
+```
 
 ## Maze
+
+The ``maze::Maze`` is holds all ``tile::Tile`` items.
 
 ![a maze](maze.svg)
 
 ```rust
-use maze_tiles_rust::maze::maze::Maze;
-use maze_tiles_rust::tile::tile::Tile;
-
 let mut maze = Maze::new(6, 6);
-maze.add_tile(Tile::new_path());
+let tile = Tile::new(Position::new(0, 0), Field::Ground);
+maze.add_tile(tile);
+assert_eq!(maze.tiles.contains_key(&Position::new(0, 0)), true);
 ```

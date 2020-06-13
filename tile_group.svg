@@ -1,0 +1,10 @@
+<svg width="150" height="150" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="1.5">
+    <path fill="#ebebeb" stroke="#000" d="M0 0h50v50H0z"/>
+    <path fill="#7a7a7a" stroke="#000" d="M50 0h50v50H50z"/>
+    <path fill="#ebebeb" stroke="#000" d="M100 0h50v50h-50zM0 50h50v50H0z"/>
+    <path fill="#7a7a7a" stroke="#000" d="M50 50h50v50H50z"/>
+    <path fill="#ebebeb" stroke="#000" d="M100 50h50v50h-50zM0 100h50v50H0z"/>
+    <path fill="#7a7a7a" stroke="#000" d="M50 100h50v50H50z"/>
+    <path fill="#ebebeb" stroke="#000" d="M100 100h50v50h-50z"/>
+    <path fill="none" stroke="#b63f3f" stroke-width="2" d="M0 0h150v150H0z"/>
+</svg>
