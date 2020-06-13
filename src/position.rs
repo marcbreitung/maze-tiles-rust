@@ -25,7 +25,7 @@ impl Add for Position {
 
 #[cfg(test)]
 mod tests {
-    use tile::position::Position;
+    use position::Position;
 
     #[test]
     fn position_new() {

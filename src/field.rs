@@ -1,6 +1,6 @@
 #[derive(Debug, Copy, Clone, PartialEq)]
 pub enum Field {
-    None,
-    Ground,
-    Path,
+    None = 0,
+    Ground = 1,
+    Path = 2,
 }
