@@ -18,8 +18,8 @@ impl TileGroup {
     }
 
     pub fn rotate(&mut self) {
-        let mut rotated = vec![vec![Field::None; self.size.width as usize]; self.size.height as usize];
-        for (row_index, row) in self.fields.chunks(self.size.width as usize).enumerate() {
+        let mut rotated = vec![vec![Field::None; self.size.columns as usize]; self.size.rows as usize];
+        for (row_index, row) in self.fields.chunks(self.size.columns as usize).enumerate() {
             for (column_index, column) in row.iter().enumerate() {
                 rotated[column_index][row.len() - 1 - row_index] = *column;
             }
@@ -48,8 +48,8 @@ mod test {
         let tile_group = TileGroup::new(Position::new(0, 1), Size::new(3, 3), fields);
         assert_eq!(0, tile_group.origin.x);
         assert_eq!(1, tile_group.origin.y);
-        assert_eq!(3, tile_group.size.width);
-        assert_eq!(3, tile_group.size.height);
+        assert_eq!(3, tile_group.size.columns);
+        assert_eq!(3, tile_group.size.rows);
     }
 
     #[test]

@@ -45,7 +45,7 @@ impl Maze {
     /// assert_eq!(maze.tiles.contains_key(&Position::new(0, 0)), true);
     /// ```
     pub fn add_tile(&mut self, tile: Tile) {
-        if tile.position.x < self.size.width && tile.position.y < self.size.height {
+        if tile.position.x < self.size.columns && tile.position.y < self.size.rows {
             if self.tiles.contains_key(&tile.position) == false {
                 self.tiles.insert(tile.position.clone(), tile);
             }
@@ -73,7 +73,7 @@ impl Maze {
     /// maze.add_tile_group(tile_group);
     /// ```
     pub fn add_tile_group(&mut self, tile_group: TileGroup) {
-        for (y, fields) in tile_group.fields.chunks(tile_group.size.width as usize).enumerate() {
+        for (y, fields) in tile_group.fields.chunks(tile_group.size.columns as usize).enumerate() {
             for (x, field) in fields.iter().enumerate() {
                 let position = Position::new(x as u32, y as u32) + tile_group.origin.clone();
                 let tile = Tile::new(position, *field);
