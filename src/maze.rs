@@ -5,6 +5,7 @@ use tile::Tile;
 use tile_group::TileGroup;
 use size::Size;
 
+/// A maze is a group of ``Tiles``
 pub struct Maze {
     pub tiles: HashMap<Position, Tile>,
     size: Size,
