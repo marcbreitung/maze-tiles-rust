@@ -1,7 +1,7 @@
 use field::Field;
 use position::Position;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Tile {
     pub position: Position,
     pub field: Field,

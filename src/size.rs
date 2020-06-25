@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct Size {
     pub rows: u32,
     pub columns: u32,
