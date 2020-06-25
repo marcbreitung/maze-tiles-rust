@@ -1,6 +1,6 @@
 # Maze Tiles
 
-[![Build Status](https://travis-ci.org/marcbreitung/maze-tiles-rust.svg?branch=master)](https://travis-ci.org/marcbreitung/maze-tiles-rust)
+[![Build Status](https://travis-ci.org/marcbreitung/maze-tiles-rust.svg?branch=master)](https://travis-ci.org/marcbreitung/maze-tiles-rust) ![Rust](https://github.com/marcbreitung/maze-tiles-rust/workflows/Rust/badge.svg)
 
 A maze contains multiple tiles (red outline), each tile is divided into fields (black outline), which can be walkable. 
 
